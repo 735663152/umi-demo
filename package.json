@@ -2,12 +2,17 @@
   "private": true,
   "scripts": {
     "start": "umi dev",
-    "commit": "git add .  && git-cz",
+    "commit": "git add . && git-cz",
     "build": "umi build",
     "postinstall": "umi generate tmp",
     "prettier": "prettier --write '**/*.{js,jsx,tsx,ts,less,md,json}'",
     "test": "umi-test",
     "test:coverage": "umi-test --coverage"
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-customizable"
+    }
   },
   "gitHooks": {
     "pre-commit": "lint-staged"
