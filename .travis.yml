@@ -1,15 +1,28 @@
 language: node_js
 node_js:
-  - "14"
-servisces:
-  - docker
-branches:
+  - 8
+branchs:
   only:
     - master
-before_install:
-  - npm install
-script 
-  - npm run build
+cache:
+  directories:
+    - node_modules
+install:
+  - yarn install
+
+
+# language: node_js
+# node_js:
+#   - "14"
+# servisces:
+#   - docker
+# branches:
+#   only:
+#     - master
+# before_install:
+#   - npm install
+# script 
+#   - npm run build
   # - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
   # - docker build -t xzzlife/umi-demo:latest
   # - docker push xzzlife/umi-demo:latest
