@@ -8,6 +8,6 @@ before_install:
   - npm install
 script 
   - npm run build
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-  - docker build -t xzzlife/umi-demo:latest
-  - docker push xzzlife/umi-demo:latest
+  # - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  # - docker build -t xzzlife/umi-demo:latest
+  # - docker push xzzlife/umi-demo:latest
