@@ -1,32 +1,66 @@
-language: node_js
-node_js:
-  - "14"
-branches:
-  only:
-    - master
-cache:
-  directories:
-    - node_modules
-install:
-  - yarn install
-script:
-  - npm run build
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-  - docker build -t xzzlife/umi-demo:latest
-  - docker push xzzlife/umi-demo:latest
+name: builduUmi #名称
 
+on:
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - README.md
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v3 #git CLONE代码到本机
+
+      - name: Node环境
+        uses: actions/setup-node@v3
+        with:
+          node-version:14.x
+          cache: 'yarn'
+      
+      - name: 缓存检查
+        id: cache-dependencies
+        uses: action/cache@v3
+        with:
+          path: |
+            **/node_modules
+          key: ${{runner.OS}}-${{hashFiles('**/yarn.lock')}}
+
+      - name: 安装依赖
+        if: steps.cache-dependencies.outputs.cache-hit != 'true'
+        run: yarn
+      
+      - name: 打包构建
+        run: yarn build
+
+      - name: 查看文件
+        run: ls -a
+
+      - name: 部署
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.USER_HOST }}
+          username: ${{ secrets.USER_NAME }}
+          key: ${{ secrets.KEY }}
+          source: './dist'
+          target: ${{ secrets.USER_TARGET }}
 # language: node_js
 # node_js:
 #   - "14"
-# servisces:
-#   - docker
 # branches:
 #   only:
-#     - master
-# before_install:
-#   - npm install
-# script 
+#     - master 
+# cache:
+#   directories:
+#     - node_modules
+# install:
+#   - yarn install
+# script:
 #   - npm run build
-  # - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-  # - docker build -t xzzlife/umi-demo:latest
-  # - docker push xzzlife/umi-demo:latest
+#   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+#   - docker build -t xzzlife/umi-demo:latest
+#   - docker push xzzlife/umi-demo:latest
